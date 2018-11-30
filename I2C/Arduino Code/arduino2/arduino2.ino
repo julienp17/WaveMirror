@@ -2,7 +2,7 @@
  
 #define SLAVE_ADDRESS 0x04
 int nombre = 0;
-int numero = 2;
+int numero = 0;
 
 void setup() {
  // Initialisation du port série
