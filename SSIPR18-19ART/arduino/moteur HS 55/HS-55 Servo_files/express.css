@@ -1,0 +1,143 @@
+#pp-express-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.701961);
+}
+#pp-express-modal {
+  box-sizing: border-box;
+  display: none;
+  position: fixed;
+  top: 20%;
+  left: 40%;
+  left: calc(50% - 175px);
+  z-index: 101;
+  width: 350px;
+  height: 390px;
+  padding: 15px;
+  background: #fff;
+  border: 3px solid #ccc;
+  border-radius: 4px;
+  overflow: auto;
+}
+#pp-express-modal .button {
+  display: block;
+  width: 100%;
+  margin-top: 30px;
+}
+#pp-express-modal .button.coupon-submit {
+  margin: 0;
+  float: right;
+  width: 50%;
+  box-sizing: border-box;
+}
+#pp-express-modal .button.loading {
+  background-image: url('../../../images/gene/loader-transparent.gif');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto 60%;
+  text-indent: -9999px;
+}
+#pp-express-modal #paypal-express-coupon {
+  float: left;
+  width: 50%;
+  box-sizing: border-box;
+  height: 33px;
+  line-height: 33px;
+}
+#pp-express-modal #paypal-express-coupon-error {
+  margin-bottom: 6px;
+}
+#pp-express-modal .button2 {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
+#pp-express-modal .product-row {
+  min-height: 60px;
+  margin: 0;
+}
+#pp-express-modal .item-row {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  display: block;
+}
+#pp-express-modal .item-row.coupon-row {
+  float: left;
+  width: 100%;
+}
+#pp-express-modal .item-subrow {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: block;
+}
+#pp-express-modal .product-image {
+  float: left;
+  width: 50px;
+  height: 50px;
+  margin: 0;
+  overflow: hidden;
+}
+#pp-express-modal .product-image img {
+  max-width: 100%;
+}
+#pp-express-modal .product-info {
+  margin-left: 60px;
+  padding-top: 5px;
+}
+#pp-express-modal .product-qty {
+  font-size: 0.8rem;
+}
+#pp-express-modal #shopping-cart-totals-table {
+  width: 100%;
+}
+#pp-express-modal #shopping-cart-totals-table td {
+  padding-left: 10px;
+}
+#pp-express-modal.loading:before {
+  content: " ";
+  background: url('../../../images/gene/loader.gif') no-repeat;
+  height: 48px;
+  width: 48px;
+  position: absolute;
+  top: 30%;
+  left: 44%;
+  left: calc(50% - 24px);
+}
+@media (max-width: 770px) {
+  #pp-express-modal {
+    width: 70%;
+    height: 80%;
+    top: 10%;
+    left: 15%;
+  }
+}
+@media (max-width: 500px) {
+  #pp-express-modal {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    border: none;
+    border-radius: 0;
+    padding: 25px;
+  }
+}
+/* If the element contains a PayPal express button don't force the buttons to width 100% */
+.product-view .add-to-cart-buttons.braintree-paypal-express-container .button {
+  width: auto;
+}
+@media (max-width: 450px) {
+  .product-view .add-to-cart-buttons.braintree-paypal-express-container {
+    width: 100%;
+  }
+  .product-view .add-to-cart-buttons.braintree-paypal-express-container .button {
+    width: 100%;
+  }
+}

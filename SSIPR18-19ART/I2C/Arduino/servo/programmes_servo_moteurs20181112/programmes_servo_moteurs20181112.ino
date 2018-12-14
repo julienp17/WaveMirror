@@ -7,6 +7,7 @@
   Le servo est connecté au pin 8 de l'arduino
 
 */
+#include "SparkFun_Tlc5940.h"
 
 int periode =20000; // période entre chaque début d'impulsion en microsecondes
 

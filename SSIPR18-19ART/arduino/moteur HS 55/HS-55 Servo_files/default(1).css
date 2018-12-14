@@ -1,0 +1,290 @@
+/* Accepted Cards */
+#braintree-accepted-cards img {
+  display: inline-block;
+  margin-right: 4px;
+}
+/* Hosted Fields Loading State */
+#credit-card-form.loading {
+  position: relative;
+}
+#credit-card-form .braintree-hostedfield {
+  opacity: 1;
+}
+#credit-card-form .credit-card-loading {
+  display: none;
+}
+#credit-card-form .braintree-card-unsupported {
+  color: darkred;
+  font-weight: bold;
+  padding: 6px 0 4px 0;
+}
+#credit-card-form.loading .credit-card-loading {
+  position: absolute;
+  top: 30%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 70%;
+  text-align: center;
+  display: block;
+}
+#credit-card-form.loading .credit-card-loading img {
+  margin: 16px  auto;
+}
+#credit-card-form.loading .braintree-hostedfield {
+  opacity: 0;
+}
+#credit-card-form label {
+  float: none;
+}
+/* Hosted Fields */
+#braintree-hosted-submit {
+  display: none;
+}
+.braintree-input-field {
+  height: 42px;
+  max-width: 340px;
+  padding: 0 10px;
+  border: 1px solid lightgrey;
+  background: white;
+}
+.braintree-input-field.braintree-postal-code {
+  width: 140px;
+}
+.braintree-card-input-field {
+  height: 50px;
+  width: 100%;
+  max-width: 372px;
+  border: 1px solid lightgrey;
+  position: relative;
+  background: white;
+}
+.braintree-card-input-field .card-type {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 0 10px 0 8px;
+}
+.braintree-card-input-field .card-type img {
+  height: 48px;
+}
+.braintree-card-input-field #card-number {
+  float: left;
+  height: 48px;
+  width: 100%;
+  padding-left: 66px;
+  box-sizing: border-box;
+}
+#braintree-expiration-container {
+  display: block;
+  width: 100%;
+  vertical-align: middle;
+  font-size: 0;
+}
+.braintree-expiration {
+  width: 70px;
+  display: inline-block;
+  *zoom: 1;
+  *display: inline;
+}
+.braintree-expiration-seperator {
+  vertical-align: top;
+  line-height: 42px;
+  display: inline-block;
+  *zoom: 1;
+  *display: inline;
+  font-size: 30px;
+  padding: 0 8px;
+}
+.braintree-cvv {
+  width: 80px;
+}
+.braintree-hostedfield .cvv-what-is-this {
+  margin-left: 0;
+}
+#three-d-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  z-index: 100000;
+  visibility: visible;
+  transition: 0.4s;
+  opacity: 1;
+}
+#three-d-modal.hidden {
+  visibility: hidden;
+  transition: 0.4s;
+  opacity: 0;
+}
+#three-d-modal.hidden .bt-modal-frame {
+  transition: 0.4s;
+  transform: translateY(80px);
+}
+#three-d-modal .bt-modal-frame {
+  height: 450px;
+  width: 440px;
+  margin: auto;
+  background-color: #ffffff;
+  z-index: 2;
+  border-radius: 6px;
+  transition: 0.4s;
+  transform: translateY(0);
+}
+#three-d-modal .bt-modal-body {
+  height: 380px;
+  margin: 0 20px;
+  background-color: white;
+  border: 1px solid lightgray;
+}
+#three-d-modal .bt-modal-header {
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+}
+#three-d-modal .bt-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  opacity: 0.75;
+}
+@media (max-width: 650px) {
+  #three-d-modal .bt-modal-frame {
+    width: 100%;
+  }
+}
+#paypal-container iframe {
+  display: none;
+}
+/* PayPal headless button */
+button.braintree-paypal-button {
+  background: #019cde;
+  color: white;
+  height: 46px;
+  line-height: 46px;
+  padding: 0 20px 0 18px;
+  border: none;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  font-size: 14px;
+  float: left;
+  cursor: pointer;
+}
+button.braintree-paypal-button.braintree-paypal-loading {
+  background: #014c6b url('../../../images/gene/braintree/paypal-loading.gif') center center no-repeat;
+  background-size: 32px;
+}
+button.braintree-paypal-button.braintree-paypal-loading > span {
+  opacity: 0;
+}
+button.braintree-paypal-button.braintree-paypal-loading:hover {
+  background: #014c6b url('../../../images/gene/braintree/paypal-loading.gif') center center no-repeat;
+  background-size: 32px;
+}
+button.braintree-paypal-button:hover {
+  background: #0175a6;
+}
+button.braintree-paypal-button > span {
+  display: block;
+  height: 46px;
+  line-height: 46px;
+  background: url('../../../images/gene/braintree/paypal.png') right center no-repeat;
+  background-size: 80px;
+  padding-right: 94px;
+}
+/* Saved Accounts */
+#creditcard-saved-accounts,
+#paypal-saved-accounts {
+  font-size: 0;
+  width: 100%;
+}
+#creditcard-saved-accounts tr,
+#paypal-saved-accounts tr {
+  border-bottom: 1px dotted lightgrey;
+}
+#creditcard-saved-accounts tr td,
+#paypal-saved-accounts tr td {
+  vertical-align: middle;
+}
+#payment_form_gene_braintree_creditcard #creditcard-saved-accounts label,
+#payment_form_gene_braintree_paypal #paypal-saved-accounts label,
+#payment_form_gene_braintree_creditcard #creditcard-saved-accounts .label,
+#payment_form_gene_braintree_paypal #paypal-saved-accounts .label {
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  float: none;
+}
+#payment_form_gene_braintree_creditcard p,
+#payment_form_gene_braintree_paypal p {
+  padding: 0;
+}
+#creditcard-saved-accounts tr.other-row,
+#paypal-saved-accounts tr.other-row {
+  border-bottom: 0;
+}
+#creditcard-saved-accounts label {
+  float: left;
+  padding: 10px 0;
+  line-height: 40px;
+  width: 100%;
+}
+#creditcard-saved-accounts tr.other-row label,
+#paypal-saved-accounts tr.other-row label {
+  padding: 8px 0;
+}
+#paypal-saved-accounts label {
+  padding: 6px 0;
+  line-height: 40px;
+}
+#creditcard-saved-accounts label img,
+#paypal-saved-accounts label img {
+  margin-left: 6px;
+  height: 40px;
+  float: left;
+}
+#creditcard-saved-accounts label .saved-card-info,
+#paypal-saved-accounts label .saved-paypal-email {
+  margin-left: 14px;
+  float: left;
+}
+#creditcard-saved-accounts label .saved-card-info span {
+  line-height: 40px;
+}
+#creditcard-saved-accounts label .saved-card-info span.saved-expiry-date {
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 14px;
+}
+#gene_braintree_creditcard_store_in_vault_div label,
+label[for="gene_braintree_paypal_store_in_vault"] {
+  width: auto!important;
+}
+/* Multi shipping */
+body.checkout-multishipping-billing #payment-continue.loading {
+  padding-left: 12px;
+}
+body.checkout-multishipping-billing #payment-continue.loading > span {
+  background: url('../../../images/gene/loader-white.gif') center left no-repeat;
+  background-size: 15px 15px;
+  padding-left: 22px;
+}
+body.checkout-multishipping-billing .buttons-set #paypal-complete {
+  float: right;
+  width: 400px;
+  text-align: right;
+}
+body.checkout-multishipping-billing .buttons-set #paypal-complete > label {
+  float: right;
+  margin-right: 16px;
+}
+body.checkout-multishipping-billing .buttons-set #paypal-complete #paypal-container {
+  float: right;
+}

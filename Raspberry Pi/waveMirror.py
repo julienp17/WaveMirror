@@ -27,15 +27,14 @@ camera = picamera.PiCamera()
 camera.resolution = (800, 600)
 hauteur = 0
 longeur = 0
-case = 0
-arduino = 2
 divH = 10
 divL = 12
 
 
 # Début du programme
 while True:
-    arduino = 2 # a retirer de la boucle pour le programme final
+    case = 0
+    arduino = 2 
     camera.capture('/home/pi/waveMirror/waveMirror.jpg')
     image = open('/home/pi/waveMirror/waveMirror.jpg')
     image = image.convert('L')
