@@ -11,6 +11,7 @@ Material used :
 - 10x [Sparkfun PWM Shield](https://www.sparkfun.com/products/10615)
 - 120x [HS-55 Servo-motors](https://www.servocity.com/hitec-hs-55-servo)
 - 120x Semi-cylinders contrasted from white to black (3D Printed)	
+
 Everything was provided by the highschool, and the cylinders were designed through SolidWorks by a student of the group project.  
 
 The 4 students making this project have each been assigned to work on a different part :
