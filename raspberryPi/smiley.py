@@ -1,5 +1,6 @@
 # -*-coding:Utf-8 -*
 
+import psutil
 from PIL import Image
 from PIL.Image import *
 from time import sleep
@@ -8,13 +9,21 @@ hauteur = 0
 longeur = 0
 divH = 10
 divL = 12
+happy = True
 
-while x in range(2):
-	image = open()
+for x in range(2):
+	if happy:
+		smiley = "smileyHappy.png"
+		happy = False
+	else:
+		smiley = "smileySad.png"
+		happy = True
+	image = open(smiley)
 	image = image.convert('L')
 	(l, h) = image.size
 	tailleH = int(h/divH)
-	taille L = int(l/divL)
+	tailleL = int(l/divL)
+	print(tailleH, tailleL)
 
 	for hauteur in range(divH):
 		pixHDepart = tailleH * hauteur
@@ -39,7 +48,10 @@ while x in range(2):
 
 			moyValPix = int(sommeValPix/a)
 			sleep(0.001)
-	sleep(0.001)
-
+	image.show()
+	sleep(3)
+	for proc in psutil.process_iter():
+		if proc.name() == "display":
+			proc.kill()
 
 
