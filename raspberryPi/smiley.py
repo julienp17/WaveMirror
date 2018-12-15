@@ -15,16 +15,17 @@ hauteur = 0
 longeur = 0
 divH = 10
 divL = 12
-happy = True
+happy = "pictures/smileyHappy.png"
+neutral = "pictures/smileyNeutral.png"
+sad = "pictures/smileySad.png"
+mood = [happy, neutral, sad]
+expression = 0
 
 while True:
-	if happy:
-		#smiley = "pictures/smileyHappy.png"
-		smiley = "pictures/grid.png"
-		happy = False
-	else:
-		smiley = "pictures/smileySad.png"
-		happy = True
+	if expression == 3:
+		expression = 0
+	smiley = mood[expression]
+	expression += 1
 	image = open(smiley).convert('L')
 	(l, h) = image.size
 	tailleH = int(h/divH)
