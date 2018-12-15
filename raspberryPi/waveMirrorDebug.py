@@ -15,7 +15,7 @@
 # Imports
 import smbus
 import picamera
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import *
 from io import BytesIO
 from time import sleep
@@ -24,31 +24,32 @@ from time import sleep
 bus = smbus.SMBus(1)
 camera = picamera.PiCamera()
 stream = BytesIO()
+fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 20)
 camera.resolution = (800, 600)
-(l,h) = camera.resolution
 #camera.start_preview()
+hauteur = 0
+longeur = 0
 divH = 10
 divL = 12
 
-sleep(2)
 # Début du programme
-while True:
+for i in range(2):
     case = 0
-    arduino = 2
-    
-    # Capture de l'image
+    arduino = 2 
     stream.seek(0)
     camera.capture(stream, format="jpeg")
-    image = open(stream).convert('L')
-   
+    image = open(stream).convert('L')   
+    (l, h) = image.size
     tailleH = int(h/divH)
     tailleL = int(l/divL)
+    draw = ImageDraw.Draw(image)
+    print("Passage de {0}*{1} à {2}*{3}\n1 case = {4}*{5} pixels".format(l,h,divL,divH,tailleL,tailleH))
 
-    for hauteur in range(2): # a changer pour le programme final : range(divH) au lieu de 2
+    for hauteur in range(divH):
              pixHDepart = tailleH * hauteur
              pixHFinal = tailleH * (hauteur + 1)
 
-             for longueur in range(divL): 
+             for longueur in range(divL):
                  pixLDepart = tailleL * longueur
                  pixLFinal = tailleL * (longueur + 1)
 
@@ -67,12 +68,21 @@ while True:
                          a += 1
 
                  moyValPix = int(sommeValPix / a) #la moyenne de gris pour chaque portion
+                 
+                 draw.rectangle(((pixLDepart, pixHDepart), (pixLFinal, pixHFinal)), outline="red")
+                 if moyValPix > 165 :
+                     filou = "black"
+                 else:
+                     filou = "white"
+                 draw.text(((pixLDepart+pixLFinal)/2, (pixHDepart+pixHFinal)/2), str(moyValPix), fill=filou, font=fnt)
 
                  if (case%12)+1 == 1 :
                     arduino += 1
 
                  case +=1
-                 if arduino < 4 : # a retirer pour le programme final
+                 print("Case numéro {0} = {1}".format(case,moyValPix))
+                 if arduino < 5 : # a retirer pour le programme final
                      bus.write_byte(arduino, moyValPix)
                  sleep(0.001)
-    
+    image.show()
+    sleep(3)
