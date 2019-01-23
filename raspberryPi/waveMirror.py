@@ -5,7 +5,7 @@
 ## Professeurs : AVI Philippe, Alain BENARD
 ## Eleves : PAUSE Julien (auteur de ce code), RALAMBOARIVONY Teddy, FERRERE Guillyann, GRONDIN Guillaume
 
-# Ce programme consiste à capturer l'image d'une camera RPi, la convertir en noir et blanc, la découper en 
+# Ce programme consiste à capturer l'image d'une camera RPi, la convertir en noir et blanc, la découper en
 # portions de pixels, et envoyer la moyenne de gris de chaque portions vers des Arduino par la liaison I2C
 
 # Ne marche que sur Python 2
@@ -30,17 +30,18 @@ camera.resolution = (800, 600)
 divH = 10
 divL = 12
 
+# Laissez le temps à la caméra de démarrer
 sleep(2)
-# Début du programme
+
 while True:
     case = 0
     arduino = 2
-    
+
     # Capture de l'image
     stream.seek(0)
     camera.capture(stream, format="jpeg")
     image = open(stream).convert('L')
-   
+
     tailleH = int(h/divH)
     tailleL = int(l/divL)
 
@@ -48,14 +49,14 @@ while True:
              pixHDepart = tailleH * hauteur
              pixHFinal = tailleH * (hauteur + 1)
 
-             for longueur in range(divL): 
+             for longueur in range(divL):
                  pixLDepart = tailleL * longueur
                  pixLFinal = tailleL * (longueur + 1)
 
                  a = 0
                  sommeValPix = 0
-                 y=0
-                 x=0
+                 y = 0
+                 x = 0
 
                  for y in range(tailleH):
                      for x in range(tailleL):
@@ -75,4 +76,3 @@ while True:
                  if arduino < 4 : # a retirer pour le programme final
                      bus.write_byte(arduino, moyValPix)
                  sleep(0.001)
-    
