@@ -1,6 +1,6 @@
 #include <Wire.h>
  
-#define SLAVE_ADDRESS 0x03
+#define SLAVE_ADDRESS 0x04
 int nombre = 0;
 int numero = 0;
 
@@ -30,12 +30,10 @@ void receiveData(int byteCount){
     Serial.println("");
     Serial.println("Nouvelle valeurs");
   }
-  numero = numero + 1;
+  numero++;
   nombre = Wire.read();
-  Serial.print("Numero ");
-  Serial.print(numero);
-  Serial.print(" recue : ");
-  Serial.println(nombre);
+  Serial.print("Numero " + numero);
+  Serial.println(" recue : " + nombre);
  }
 }
  

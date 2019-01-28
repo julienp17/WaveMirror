@@ -1,6 +1,6 @@
 int periode = 20000; 
-int pinServo = 8; 
-int tempsTransition = 4;
+int pinServo = 2; 
+int tempsTransition = 5;
 
 void setup() {
   pinMode(pinServo, OUTPUT); 
@@ -20,9 +20,9 @@ void loop() {
   }
 }
 
-void setAngle(int a) {
+void setAngle(int angle) {
 
-  int duree = map(a, 0, 180, 500, 2600); // on transforme l'angle en microsecondes et on stocke dans la variable duree (180, 545, 2500)
+  int duree = map(angle, 0, 180, 545, 2500); // on transforme l'angle en microsecondes et on stocke dans la variable duree (180, 545, 2500)
 
   digitalWrite(pinServo, LOW); //on met le pin à l'état bas
 
