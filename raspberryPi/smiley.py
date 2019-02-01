@@ -3,7 +3,7 @@
 # This programm shows 2 differents images every 3 seconds,
 # in this case a happy and a sad smiley,  in a infinite loop.
 # It displays their grayscale values and serve as eye-candy
-# for the day of our presentation. 
+# for the day of our presentation.
 
 import psutil
 from PIL import Image, ImageDraw, ImageFont
@@ -56,7 +56,7 @@ while True:
 			moyValPix = int(sommeValPix/a)
 			draw.rectangle(((pixLDepart, pixHDepart), (pixLFinal, pixHFinal)), outline="red")
 			if moyValPix > 165 :
-				filou = "black"  
+				filou = "black"
 			else:
 				filou = "white"
 			draw.text(((pixLDepart+pixLFinal)/2, (pixHDepart+pixHFinal)/2), str(moyValPix), fill=filou, font=fnt)
@@ -66,5 +66,3 @@ while True:
 	for proc in psutil.process_iter():
 		if proc.name() == "display":
 			proc.kill()
-
-
