@@ -1,2 +1,0 @@
-﻿tout ce qu'il y a a changer dans le programme pour chaque arduino est l'addresse (de 0x03 à 0x77) et 
-le numéro de l'arduino dans void setup

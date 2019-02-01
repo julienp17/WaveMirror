@@ -5,15 +5,21 @@
  *  
  * The Arduino receive the grayscale values of a row from the Raspberry Pi,  
  * and then controls 10 servos to adjust their position based of these values.
+ *
+ * This program is the code of the first Arduino. Since we need 120 servos and each Arduino
+ * controls 10 Servos, we need 12 Arduino in total. You can find the codes of the other
+ * Arduino's at : https://github.com/julienp17/WaveMirror/tree/master/arduino/waveMirror
+ * They're the same programm, only the SLAVE_ADDRESS changes.
+ * 
  * Throughout this code, the Raspberry Pi, acting as 'Master' in the I2C communication 
  * between itself and the Arduino, will be refered to as RPi. 
- * 
  * You will notice a lot of newlines and comments on this code, intended to help 
  * readability and comprehension for beginners.
  * 
  */
 
 #define SLAVE_ADDRESS 0x03 // The slave address of the Arduino
+// It goes from 0x03 to 0x077, so this is the first Arduino's code
 
 int color; // The byte sent by the Rpi (between 0 and 255)
 
@@ -142,22 +148,26 @@ void setAngle(int angle, int servo) {
 
   /**
    * This function sets a servo to an angle.
+   * It allows us to create a sort of PWM signal even on non-PWM pins.
    * 
-   * It takes as parameters the angle you want the Servo to turn to, and the pin of the Servo.
+   * @param angle
+   *          The angle you want the Servo to turn to.
+   * @param servo
+   *          The Servo you want to turn.
    * 
    */
 
-  int duration = map(angle, 0, 180, 545, 2500); // We transform the angle into microseconds and stock it. 
+  int duration = map(angle, 0, 180, 545, 2500); // We get the correct duration based of the angle. 
   // The default toLow and toHigh are 545 and 2500
 
-  digitalWrite(servo, LOW); //on met le pin à l'état bas
+  digitalWrite(servo, LOW); // Turn the Servo off
 
-  digitalWrite(servo, HIGH); // on envoie l'impulsion
+  digitalWrite(servo, HIGH); // Turn the Servo on
 
-  delayMicroseconds(duration); // pendant la bonne durée
+  delayMicroseconds(duration); // For the right duration
 
-  digitalWrite(servo, LOW); // on stoppe l'impulsion
+  digitalWrite(servo, LOW); // Stop the impulsion
 
-  delayMicroseconds(periode - duration); // on attend le temps restant pour atteindre la période
+  delayMicroseconds(periode - duration); // Wait for the rest of the time
 
 }
