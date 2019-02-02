@@ -5,6 +5,8 @@
  * 
  * You can use it with the Raspberry Pi's python script located 
  * at : TODO
+ * The Raspberry Pi acts as the 'Master' and the Arduino as a
+ * 'slave' device.
  * 
  * The schematics are provided in this directory.
  * 

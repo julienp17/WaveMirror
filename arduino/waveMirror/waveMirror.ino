@@ -31,10 +31,11 @@ int difference; // The difference between the current angle and the requested on
 
 int positions[9]; // A table containing the current angle of all Servos
 
-int servo = 1; // The pin of the Servos
+int servo = 1; // For each byte received, this variable stock the current Servo's pin
 
-int periode = 20000; 
-int tempsTransition = 4;
+int period = 20000; // The period (in microseconds) between each Servo's impulsion
+
+int transitionTime = 4; // The time between each Servo's rotation
 
 void setup() {
 
@@ -59,7 +60,7 @@ void setup() {
   
   Serial.println("OK");
   
-  Wire.begin(SLAVE_ADDRESS); 
+  Wire.begin(SLAVE_ADDRESS); // Begin the I2C communication as a 'slave' device
   
   Wire.onReceive(receiveData); // The function receiveData will be called everytime the RPi send a byte
   
@@ -122,19 +123,19 @@ void receiveData(int byteCount) {
       
       for (int x = 0; x <= difference; x++){ 
         
-        setAngle(x, servo); 
+        setAngle(i, servo); 
         
-        delay(tempsTransition); 
+        delay(transitionTime); 
         
       }   
       
     } else if (angle < prevAngle) { 
       
-      for (int x = 0; x <= difference; x++){ 
+      for (int i = 0; i <= difference; i++){ 
         
-        setAngle((difference - x), servo); 
+        setAngle((difference - i), servo); 
         
-        delay(tempsTransition);
+        delay(transitionTime);
         
       }
       
@@ -148,7 +149,8 @@ void setAngle(int angle, int servo) {
 
   /**
    * This function sets a servo to an angle.
-   * It allows us to create a sort of PWM signal even on non-PWM pins.
+   * It allows us to create a sort of PWM signal even on non-PWM pins
+   * by changing the duty cycle based on the angle.
    * 
    * @param angle
    *          The angle you want the Servo to turn to.
@@ -157,17 +159,17 @@ void setAngle(int angle, int servo) {
    * 
    */
 
-  int duration = map(angle, 0, 180, 545, 2500); // We get the correct duration based of the angle. 
+  int dutyCycle = map(angle, 0, 180, 545, 2500); // We get the correct duty cycle based of the angle. 
   // The default toLow and toHigh are 545 and 2500
 
   digitalWrite(servo, LOW); // Turn the Servo off
 
   digitalWrite(servo, HIGH); // Turn the Servo on
 
-  delayMicroseconds(duration); // For the right duration
+  delayMicroseconds(dutyCycle); // For the right time
 
   digitalWrite(servo, LOW); // Stop the impulsion
 
-  delayMicroseconds(periode - duration); // Wait for the rest of the time
+  delayMicroseconds(period - dutyCycle); // Wait for the rest of the period
 
 }
