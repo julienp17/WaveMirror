@@ -1,37 +1,33 @@
 # -*-coding:Utf-8 -*
 
 """This script executes our main program and shows the results of the
-recorded image, taken from the Picamera.
+recorded image, taken from a picture.
 
 It works a lot like the main program, which you can find at :
 https://github.com/julienp17/WaveMirror/blob/master/raspberryPi/waveMirror/waveMirror.py
 The difference is that we display the image along with the grid and grayscale
 values, and don't send these value to Arduinos.
 
-You can find a version of this script where the picture is not taken from
-the PiCamera, but a picture of your choice at :
+You can find a version of this script where the picture is not one you choosed, 
+but a picture taken from the PiCamera at :
 https://github.com/julienp17/WaveMirror/blob/master/raspberryPi/examples/camera/camera.py
 
 """
 
 import psutil
-import picamera
 from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import *
-from io import BytesIO
 from time import sleep
-
-# Create PiCamera and stream objects
-camera = picamera.PiCamera()
-stream = BytesIO()
-
-# The larger the resolution, the clearer the image
-# This also means bigger procession time
-camera.resolution = (800, 600)
-(l,h) = camera.resolution
 
 divL = 12 # The output width
 divH = 10 # The output height
+
+# The path to the picture of your choice
+picture = "pictures/kirby.jpg"
+
+# Open the image, and convert it to black & white
+image = open(picture).convert('L')
+(l, h) = image.size
 
 # We calculate the width and height of each square in the grid
 # The int type may left some pixels not in squares, but we can't have
@@ -42,16 +38,6 @@ tailleL = int(l/divL)
 # Initialize Image.Draw to be able to draw later and a choose a font
 draw = ImageDraw.Draw(image)
 fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 20)
-
-# Let enough time for the camera to warmup
-sleep(2)
-
-# Capture the image in a stream
-stream.seek(0)
-camera.capture(stream, format="jpeg")
-
-# Open the image, and convert it to black & white
-image = open(stream).convert('L')
 
 # For each square, we get its first and last height pixel
 for hauteur in range(divH):
@@ -81,7 +67,7 @@ for hauteur in range(divH):
         moyValPix = int(sommeValPix / a)
 
 		# Draw the square on the image
-		draw.rectangle(((pixLDepart, pixHDepart), (pixLFinal, pixHFinal)), outline="red")
+        draw.rectangle(((pixLDepart, pixHDepart), (pixLFinal, pixHFinal)), outline="red")
 
 		# Based on the grayscale value, we will write it either black or
 		# white to make it visible
@@ -91,7 +77,7 @@ for hauteur in range(divH):
             text_color = "white"
 
 		# At last, we write the grayscale value in the middle of the square
-		draw.text(((pixLDepart+pixLFinal)/2, (pixHDepart+pixHFinal)/2), str(moyValPix), fill=text_color, font=fnt)
+        draw.text(((pixLDepart+pixLFinal)/2, (pixHDepart+pixHFinal)/2), str(moyValPix), fill=text_color, font=fnt)
 
 # When each square has been drawn and each greyscale value have been
 # written in them, we show the image to the user
