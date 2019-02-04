@@ -18,20 +18,16 @@
  * 
  */
 
-#define SLAVE_ADDRESS 0x03 // The slave address of the Arduino
+#define SLAVE_ADDRESS 0x04 // The slave address of the Arduino
 // It goes from 0x03 to 0x077, so this is the first Arduino's code
 
-int color; // The byte sent by the Rpi (between 0 and 255)
+const int SERVOS = 10; // The number of Servos per Arduino
 
-int angle; // The angle which the Servo will turn to, based on the color (between 0 and 180)
+int positions[SERVOS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // A table containing the current positions of the Servos
 
-int prevAngle; // The angle which the Servo is currently at
+int newPositions[SERVOS]; // A table containing the new positions of the Servos
 
-int difference; // The difference between the current angle and the requested one
-
-int positions[9]; // A table containing the current angle of all Servos
-
-int servo = 1; // For each byte received, this variable stock the current Servo's pin
+int received; // This variable counts the number of bytes byte received
 
 int period = 20000; // The period (in microseconds) between each Servo's impulsion
 
@@ -48,17 +44,17 @@ void setup() {
    * 
    */
 
-  for (int servo = 2; servo == 12; servo++){ 
+  for (int pinServo = 2; pinServo == 12; pinServo++){ 
     
-    pinMode(servo, OUTPUT); 
+    pinMode(pinServo, OUTPUT); 
     
-    digitalWrite(servo, LOW); 
+    digitalWrite(pinServo, LOW); 
     
   }
   
   Serial.begin(9600); 
   
-  Serial.println("OK");
+  Serial.println("Arduino activated.");
   
   Wire.begin(SLAVE_ADDRESS); // Begin the I2C communication as a 'slave' device
   
@@ -74,76 +70,82 @@ void loop() { // This loop checks if a byte has been sent by the RPi every 100 m
 
 
 void receiveData(int byteCount) { 
-  
-  /* 
-   *  This function is called everytime the RPi sends a byte.
-   *  
-   *  First, we determine which Servo needs to turn. Based of 
-   *  the grayscale value sent by the RPi, we map it to an angle,
-   *  turn the Servo to this angle, and update it in the table
-   *  that keeps all the Servos positions.
-   *  
-   */
-  
-  while(Wire.available()){ // While a byte is waiting to be read
-    
-    servo++; // We change Servos
-    
-    if (servo > 12){ // We return to the beginning if the pins are out of bounds
-      
-      servo = 2; // The pin 2 being the beginning
-      
-    }
-    
-    color = Wire.read(); // We read the byte that the RPi sent
-    
-    angle = map(color, 0, 255, 0, 180); // Convert it to an angle
-    
-    prevAngle = positions[servo - 2]; // We get the current angle of the Servo. Since the pin 2 corresponds to the
-    // first Servo, and 0 is the index of this first Servo in the table, we need to substract 2 to get the correct index.
 
-    positions[servo - 2] = angle; // We update the angle to the new one
+  while(Wire.available()) {
+
+    int color = Wire.read();
+
+    Serial.print("Color received = ");
+
+    Serial.print(color);
+
+    int angle = map(color, 0, 255, 0, 180);
+
+    Serial.print(", angle converted = ");
+
+    Serial.println(angle);
+
+    newPositions[received] = angle;
+
+    received++;
     
-    difference = abs(angle - prevAngle); // We get the difference between the current angle and the new one
+  }
 
-    /**
-     * If the new angle is bigger than the current one, we will increment the angle 1 by 1 until we get to that new angle. 
-     * ex : from 106 to 180 => 106, 107, 108...
-     * 
-     * Else, we will decrement 1 by 1 to that new angle.
-     * ex : from 180 to 106 => 180, 179, 178...
-     * 
-     * The reason we do it 1 by 1 instead of straigth away is because it seems more fluid operating that way.
-     * 
-     * In the case that the new angle is equal to the current one, we simply don't do anything.
-     * 
-     */
+  if (received == SERVOS){
 
-    if (angle > prevAngle){ 
+    Serial.println();
+
+    Serial.println("Beginning servo rotation...");
+    
+    for (int servo = 0; servo < SERVOS; servo++){
+
+      Serial.print("Servo n°");
+
+      Serial.print(servo + 1);
       
-      for (int x = 0; x <= difference; x++){ 
-        
-        setAngle(i, servo); 
-        
-        delay(transitionTime); 
-        
-      }   
+      int prevAngle = positions[servo];
+
+      Serial.print(" : current angle = ");
+
+      Serial.print(prevAngle);
       
-    } else if (angle < prevAngle) { 
+      int angle = newPositions[servo];
+
+      Serial.print(", new angle = ");
+
+      Serial.println(angle);
+
+      int difference = abs(angle - prevAngle);
       
-      for (int i = 0; i <= difference; i++){ 
+      for (int i = 0; i < difference; i++){
         
-        setAngle((difference - i), servo); 
+        if (angle > prevAngle){
+          
+          setAngle(i, (servo + 2) );
+          
+        } else {
+          
+          setAngle((difference - i), (servo + 2));
+          
+        }
         
         delay(transitionTime);
         
       }
+
+      positions[servo] = angle;
       
     }
-   
-  } 
+
+    received = 0;
+
+    Serial.println("\nNew values :");
+    
+  }
   
 }
+   
+
 
 void setAngle(int angle, int servo) {
 

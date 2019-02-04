@@ -12,7 +12,7 @@ int servo = 2; // The pin of the Servo
 
 int period = 20000; // The period (in microseconds) between each Servo's impulsion
 
-int transitionTime = 5; // The time between each Servo's rotation
+int transitionTime = 4; // The time between each Servo's rotation
 
 void setup() {
 
