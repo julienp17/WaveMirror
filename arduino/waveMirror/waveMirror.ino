@@ -1,33 +1,31 @@
 #include <Wire.h>
 
 /* 
- * You can find the schematics of this project at this link : //TODO
- *  
- * The Arduino receive the grayscale values of a row from the Raspberry Pi,  
- * and then controls 10 servos to adjust their position based of these values.
- *
- * This program is the code of the first Arduino. Since we need 120 servos and each Arduino
- * controls 10 Servos, we need 12 Arduino in total. You can find the codes of the other
- * Arduino's at : https://github.com/julienp17/WaveMirror/tree/master/arduino/waveMirror
- * They're the same programm, only the SLAVE_ADDRESS changes.
+ * This is the main Arduino program of the project. 
  * 
- * Throughout this code, the Raspberry Pi, acting as 'Master' in the I2C communication 
- * between itself and the Arduino, will be refered to as RPi. 
- * You will notice a lot of newlines and comments on this code, intended to help 
- * readability and comprehension for beginners.
+ * After receiving the grayscale values of a row from the Raspberry Pi,
+ * we begin to turn each Servos at an angle based of these values.
+ *  
+ * Since we need 120 Servos and each Arduino controls 10 of them, we need 
+ * 12 Arduino in total. You can all pass them this program, but make sure 
+ * to change the SLAVE_ADDRESS
+ *
+ * 
+ * You can find the schematics in this directory.
  * 
  */
 
-#define SLAVE_ADDRESS 0x04 // The slave address of the Arduino
+#define SLAVE_ADDRESS 0x03 // The slave address of the Arduino
 // It goes from 0x03 to 0x077, so this is the first Arduino's code
 
 const int SERVOS = 10; // The number of Servos per Arduino
 
-int positions[SERVOS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // A table containing the current positions of the Servos
+int positions[SERVOS] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // A table that stocks the current positions of the Servos
+// At the beginning, we assume each Servos has been initialsed to 0 degrees.
 
-int newPositions[SERVOS]; // A table containing the new positions of the Servos
+int newPositions[SERVOS]; // A table that will stock the new positions of the Servos
 
-int received; // This variable counts the number of bytes byte received
+int received; // This variable counts the number of bytes received from the Raspberry Pi
 
 int period = 20000; // The period (in microseconds) between each Servo's impulsion
 
@@ -39,16 +37,17 @@ void setup() {
    * In the setup, we initialize each Servo as an OUTPUT, turn them off, and 
    * begin the I2C communication as a 'slave' device.
    * 
-   * The pins of the Servos range from 2 to 12. This is because the first two pins
-   * of the Arduino (TX and RX) are used for Serial communication.
+   * The pins of the Arduino range from 2 to 13. This is because the first two 
+   * pins (TX and RX) are used for Serial communication.
+   * We use 10 Servos so we conenct them from pin 2 to pin 12.
    * 
    */
 
   for (int pinServo = 2; pinServo == 12; pinServo++){ 
     
-    pinMode(pinServo, OUTPUT); 
+    pinMode(pinServo, OUTPUT); // Initialize each Servo as an OUTPUT
     
-    digitalWrite(pinServo, LOW); 
+    digitalWrite(pinServo, LOW); // Turn them off
     
   }
   
@@ -69,27 +68,53 @@ void loop() { // This loop checks if a byte has been sent by the RPi every 100 m
 }
 
 
-void receiveData(int byteCount) { 
+void receiveData(int byteCount) {
+
+  /* 
+   *  This function is called everytime the RPi sends a byte.
+   *  
+   *  First, we map the grayscale value received (from 0 to 255) 
+   *  to an angle (from 0 to 180), then we stock it in a table
+   *  containing the requested new positions.
+   *  
+   *  It is a better solution to stock the new positions and then 
+   *  move all Servos at once, rather than getting a new value and 
+   *  immediately moving the correct Servo. 
+   *  The reason is that, in the second case, while the Arduino is 
+   *  busy moving the Servo, the Raspberry Pi still send it new values. 
+   *  Since the Arduino is busy, it won't receive these new values, 
+   *  leading the script to crash on the Raspberry Pi's side.
+   *  
+   *  That's why we count how much values we receive : to determine
+   *  when should we move the Servos. In that case, the Raspberry Pi
+   *  will be sending new values to other Arduinos while we're busy.
+   *  
+   */
 
   while(Wire.available()) {
 
-    int color = Wire.read();
+    int color = Wire.read(); // Read the grayscale value from I2C communication
 
     Serial.print("Color received = ");
 
     Serial.print(color);
 
-    int angle = map(color, 0, 255, 0, 180);
+    int angle = map(color, 0, 255, 0, 180); // Map it to an angle
 
     Serial.print(", angle converted = ");
 
     Serial.println(angle);
 
-    newPositions[received] = angle;
+    newPositions[received] = angle; // Stock it in the table containing the new positions
 
-    received++;
+    received++; // Add +1 to the number of values we have received
     
   }
+
+  /*
+   * When we have received as much vales as we have Servos, we begin
+   * to turn them.
+   */
 
   if (received == SERVOS){
 
@@ -97,31 +122,44 @@ void receiveData(int byteCount) {
 
     Serial.println("Beginning servo rotation...");
     
-    for (int servo = 0; servo < SERVOS; servo++){
+    for (int servo = 0; servo < SERVOS; servo++){ // For each servo
 
       Serial.print("Servo n°");
 
       Serial.print(servo + 1);
       
-      int prevAngle = positions[servo];
+      int prevAngle = positions[servo]; // We get its current position
 
       Serial.print(" : current angle = ");
 
       Serial.print(prevAngle);
       
-      int angle = newPositions[servo];
+      int angle = newPositions[servo]; // We get its requested new position
 
       Serial.print(", new angle = ");
 
       Serial.println(angle);
 
-      int difference = abs(angle - prevAngle);
+      int difference = abs(angle - prevAngle); // We calculate the difference between them
+
+    /**
+     * If the new angle is bigger than the current one, we will increment the angle 1 by 1 until we get to that new angle. 
+     * ex : from 106 to 180 => 106, 107, 108...
+     * 
+     * Else, we will decrement 1 by 1 to that new angle.
+     * ex : from 180 to 106 => 180, 179, 178...
+     * 
+     * The reason we do it 1 by 1 instead of straigth away is because it seems more fluid operating that way.
+     * 
+     * In the case that the new angle is equal to the current one, we simply don't do anything.
+     * 
+     */
       
       for (int i = 0; i < difference; i++){
         
         if (angle > prevAngle){
           
-          setAngle(i, (servo + 2) );
+          setAngle(i, (servo + 2) ); // We have to add + 2 to the servo to get its pin. Remember, the first Servo's pin is 2.
           
         } else {
           
@@ -133,11 +171,11 @@ void receiveData(int byteCount) {
         
       }
 
-      positions[servo] = angle;
+      positions[servo] = angle; // Update the current position of the Servo to the new position
       
     }
 
-    received = 0;
+    received = 0; // And begin a new loop 
 
     Serial.println("\nNew values :");
     
