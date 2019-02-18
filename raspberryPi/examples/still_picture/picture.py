@@ -23,7 +23,7 @@ divL = 12 # The output width
 divH = 10 # The output height
 
 # The path to the picture of your choice
-picture = "pictures/chrom.png"
+picture = "pictures/giorno.jpeg"
 
 # Open the image, and convert it to black & white
 image = open(picture).convert('L')
@@ -37,7 +37,7 @@ tailleL = int(l/divL)
 
 # Initialize Image.Draw to be able to draw later and a choose a font
 draw = ImageDraw.Draw(image)
-fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 25)
+fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 10)
 
 # For each square, we get its first and last height pixel
 for hauteur in range(divH):
@@ -77,7 +77,7 @@ for hauteur in range(divH):
             text_color = "white"
 
 		# At last, we write the grayscale value in the middle of the square
-        draw.text((pixLDepart, pixHDepart+pixHFinal)/2), str(moyValPix), fill=text_color, font=fnt)
+        draw.text((pixLDepart, (pixHDepart+pixHFinal)/2), str(moyValPix), fill=text_color, font=fnt)
 
 # When each square has been drawn and each greyscale value have been
 # written in them, we show the image to the user
