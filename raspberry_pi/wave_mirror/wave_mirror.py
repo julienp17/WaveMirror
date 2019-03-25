@@ -2,8 +2,9 @@
 
 """This script is the main program of our project.
 
-The Python version is 2.7.13
-To upgrade you must install the Pillow library instead of PIL.
+It was developped for Python version 2.7.13
+If you wish to upgrade to Python3, you must install the Pillow
+library instead of PIL.
 
 The goal is to capture the image of the PiCamera, convert it to black & white,
 cut the image in 12*10 squares of pixels, get the grayscale values of each of 
