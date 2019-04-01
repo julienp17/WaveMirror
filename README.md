@@ -21,3 +21,7 @@ The 4 students making this project have each been assigned to work on a differen
 - Solidworks modelisation & 3D printing (GRONDIN Guillaume)
 - Arduino connections & servos (FERRERE Guillyann)
 - Raspberry Pi & Arduino code (PAUSE Julien) <-- Author of this repository
+
+Since the author of this repository is responsible for the Raspberry Pi part, you'll find more ressources in that directory. However, don't hesitate to ask if you have any questions about other parts. 
+
+Feel free to contact me about this project at : julien.pause17@gmail.com
