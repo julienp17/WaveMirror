@@ -51,9 +51,9 @@ void setup() {
     
   }
   
-  Serial.begin(9600); 
+  //Serial.begin(9600); 
   
-  Serial.println("Arduino activated.");
+  //Serial.println("Arduino activated.");
   
   Wire.begin(SLAVE_ADDRESS); // Begin the I2C communication as a 'slave' device
   
@@ -95,15 +95,15 @@ void receiveData(int byteCount) {
 
     int color = Wire.read(); // Read the grayscale value from I2C communication
 
-    Serial.print("Color received = ");
+    //Serial.print("Color received = ");
 
-    Serial.print(color);
+    //Serial.println(color);
 
     int angle = map(color, 0, 255, 0, 180); // Map it to an angle
 
-    Serial.print(", angle converted = ");
+    //Serial.print(", angle converted = ");
 
-    Serial.println(angle);
+    //Serial.println(angle);
 
     newPositions[received] = angle; // Stock it in the table containing the new positions
 
@@ -118,27 +118,27 @@ void receiveData(int byteCount) {
 
   if (received == SERVOS){
 
-    Serial.println();
+    //Serial.println();
 
-    Serial.println("Beginning servo rotation...");
+    //Serial.println("Beginning servo rotation...");
     
     for (int servo = 0; servo < SERVOS; servo++){ // For each servo
 
-      Serial.print("Servo n°");
+      //Serial.print("Servo n°");
 
-      Serial.print(servo + 1);
+      //Serial.print(servo + 1);
       
       int prevAngle = positions[servo]; // We get its current position
 
-      Serial.print(" : current angle = ");
+      //Serial.print(" : current angle = ");
 
-      Serial.print(prevAngle);
+      //Serial.print(prevAngle);
       
       int angle = newPositions[servo]; // We get its requested new position
 
-      Serial.print(", new angle = ");
+      //Serial.print(", new angle = ");
 
-      Serial.println(angle);
+      //Serial.println(angle);
 
       int difference = abs(angle - prevAngle); // We calculate the difference between them
 
@@ -177,7 +177,7 @@ void receiveData(int byteCount) {
 
     received = 0; // And begin a new loop 
 
-    Serial.println("\nNew values :");
+    //Serial.println("\nNew values :");
     
   }
   
