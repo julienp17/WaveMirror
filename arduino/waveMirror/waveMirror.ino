@@ -37,7 +37,7 @@ Servo servo6;
 Servo servo7;
 Servo servo8;
 
-int positions[NB_SERVOS] // Store the positions of the Servos
+int positions[NB_SERVOS]; // Table storing the positions of the Servos
 int received = 0 ; // Counts the number of bytes received from the Raspberry Pi
 
 void setup() {
@@ -53,6 +53,7 @@ void setup() {
   servo8.attach(9);
 
   //Serial.begin(9600);
+  //Serial.println("Arduino activated");
   
   Wire.begin(SLAVE_ADDRESS); // Begin the I2C communication as a 'slave' device
   Wire.onReceive(receiveData); // Define function called when we receive data
@@ -82,7 +83,7 @@ void receiveData(int byteCount) { // Called everytime we receive data from the R
 
     //Serial.print("Color received = ");
 
-    //Serial.println(color);
+    //Serial.print(color);
 
     int angle = map(color, 0, 255, 180, 0); // Map it to an angle
 
@@ -125,9 +126,11 @@ void receiveData(int byteCount) { // Called everytime we receive data from the R
     servo6.write(positions[5]);
     servo7.write(positions[6]);
     servo8.write(positions[7]);
-    servo9.write(positions[8]);
 
     // Begin a new loop with new values
     received = 0;
+
+    //Serial.println();
+    //Serial.println("New values : ");
   }
-    
+}    
