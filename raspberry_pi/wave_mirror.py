@@ -1,13 +1,12 @@
 # -*-coding:Utf-8 -*
 
-"""This script is the main program of our project.
+"""This is the main Raspberry Pi's program of our project.
 
-It was developped for Python version 2.7.13
-If you wish to upgrade to Python3, you must install the Pillow
-library instead of PIL.
+It it for use with Python version 2.7.13
+If you wish to upgrade to Python3, you must use Pillow instead of PIL.
 
 The goal is to capture the image of the PiCamera, convert it to black & white,
-cut the image in 12*10 squares of pixels, get the grayscale values of each of
+cut the image in the required squares of pixels, get the grayscale values of each of
 those squares, and then send these values to each Arduino via I2C.
 
 You can find the Arduino's code at :
@@ -29,12 +28,12 @@ bus = smbus.SMBus(1)
 camera = picamera.PiCamera()
 stream = BytesIO()
 
-output_width = 12 # Number of Arduinos
-output_height = 10 # Number of Servos an Arduino controls
+output_width = 8 # Number of Arduinos
+output_height = 6 # Number of Servos per Arduino
 
 # The larger the resolution, the clearer the image
 # This also means bigger procession time
-camera.resolution = (800, 600)
+camera.resolution = (480, 360)
 (width, height) = camera.resolution
 
 # We calculate the width and height of each square in the grid
@@ -45,7 +44,7 @@ tailleH = int(height / output_height)
 nb_pixels = tailleH * tailleL
 
 # Uncomment below this if you want a live preview of what the camera captures
-# It only works if the Raspberry Pi's is connected to a monitor, not VNC
+# It only works if the Raspberry Pi's is connected to a monitor, not VNC or SSH
 ### camera.start_preview()
 
 # Let enough time for the camera to warmup
@@ -83,15 +82,14 @@ while True:
                     coordY = y + (pixHDepart)
                     current_pixel_value = Image.getpixel(image, (coordX, coordY))
                     sum_gray += current_pixel_value
-                    a += 1
 
             # We divide the sum of gray in the square by the number
 			# of pixels the square have, to get its average greyscale value
-            average_gray = int(sum_gray / nb_pixels)
+            average_gray = int(sum_gray/nb_pixels)
 
             # Each Arduino treats a row, so we send 12 values to each of them.
             # That means if we have sent 12 values, we change Arduinos.
-            if (case%12)+1 == 1 :
+            if (case%output_width)+1 == 1 :
                 arduino += 1
             case +=1
 
@@ -100,3 +98,4 @@ while True:
 
             # Let the program rest a bit
             sleep(0.001)
+    sleep(0.01)
