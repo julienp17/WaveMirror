@@ -1,5 +1,3 @@
-#include <Wire.h>
-
 /*
  * This program allows us to test the I2C feature.
  * 
@@ -11,6 +9,8 @@
  * The schematics are provided in this directory.
  * 
  */
+
+#include <Wire.h>
 
 #define SLAVE_ADDRESS 0x03 // The slave address of the Arduino
 // It goes from 0x03 to 0x077
