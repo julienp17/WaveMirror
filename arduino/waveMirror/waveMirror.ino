@@ -126,6 +126,7 @@ void receiveData(int byteCount) { // Called everytime we receive data from the R
     servo6.write(positions[5]);
     servo7.write(positions[6]);
     servo8.write(positions[7]);
+    delay(15);
 
     // Begin a new loop with new values
     received = 0;
