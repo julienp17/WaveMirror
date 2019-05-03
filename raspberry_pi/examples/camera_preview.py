@@ -1,14 +1,12 @@
 # -*-coding:Utf-8 -*
 
-"""This script allows us to test the PiCamera.
-
-It simply shows the preview of the camera and let us mess around with it.
+"""This script allows us to test the PiCamera by showing what it captures.
 
 You can find more information on the official Raspberry Pi's projects website:
 https://projects.raspberrypi.org/en/projects/getting-started-with-picamera
 
-Make sure the Raspberry Pi is connected to a monitor if you want to see 
-the preview. The preview doesn't show on VNC.
+Make sure the Raspberry Pi is connected to a monitor to see the preview. 
+It doesn't work on VNC & SSH.
 
 """
 
@@ -18,15 +16,13 @@ from time import sleep
 # Create object for PiCamera class
 camera = picamera.PiCamera()
 
-# Set some parameters for the camera
+# Set the resolution of the camera
 camera.resolution = (800, 600)
-camera.brightness = 60
-camera.annotate_text = 'Hi Pi User'
 
-# Start the preview for 5 seconds
+# Start the preview endlessly
 camera.start_preview()
-sleep(5)
+while True:
+    sleep(5)
 
-# Store the image
-camera.capture('image1.jpeg')
+# Stop it
 camera.stop_preview()
