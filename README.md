@@ -1,5 +1,7 @@
 # WaveMirror
 
+## Update : as of 04/09/2019, this project is no longer maintened. However, it will be kept here for reference. 
+
 This repository is for an highschool project in Lycée George Brassens (St-Denis, Réunion, french overseas island in the Indian Ocean). It is based on [Daniel Rozin's](https://www.smoothware.com/danny/) [Weave Mirror](https://smoothware.com/danny/weavemirror.html) with a 8x6 grid of servo-motors. This project help the students grow with interesting software and technologies such as Arduino, Raspberry Pi, SolidWorks or Scilab. It also uses a 3D Printer for moving parts that will be controlled by Servos.
 
 A photo taken by a PiCamera is treated by a Raspberry Pi, which send the average grayscale values of the picture in 48 squares of pixels (8x6) to 6 Arduino via I2C communication. Each Arduino treats a row, converting these values in degrees (0-255 grayscale to 0-180 degrees) to control 8 servo-motors. The servo-motors rotate 3D printed white-to-black cylinders, which then displays the picture back to the user, making it act like a mirror. 
